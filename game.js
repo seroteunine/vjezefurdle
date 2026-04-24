@@ -235,6 +235,24 @@ function revealRow(rowIndex, colors, done) {
   }
 }
 
+// ── Word validation ─────────────────────────────────────
+
+const VALID_WORDS = new Set(WORDS.map(e => e.word.toUpperCase()));
+
+let validating = false;
+
+async function isValidDutchWord(word) {
+  if (VALID_WORDS.has(word)) return true;
+  try {
+    const res = await fetch(`https://en.wiktionary.org/api/rest_v1/page/definition/${word.toLowerCase()}`);
+    if (!res.ok) return false;
+    const data = await res.json();
+    return 'nl' in data;
+  } catch {
+    return true; // network error → fail open
+  }
+}
+
 // ── Input handling ──────────────────────────────────────
 
 function handleKey(key) {
@@ -261,7 +279,8 @@ function handleKey(key) {
   }
 }
 
-function submitGuess() {
+async function submitGuess() {
+  if (validating) return;
   const rowIndex = state.guesses.length;
   const guess    = state.current;
 
@@ -271,6 +290,18 @@ function submitGuess() {
     return;
   }
 
+  validating = true;
+  showMessage('…');
+  const valid = await isValidDutchWord(guess);
+  validating = false;
+
+  if (!valid) {
+    showMessage('Geen geldig woord');
+    shakeTiles(rowIndex);
+    return;
+  }
+
+  showMessage('');
   const colors = getColors(guess, state.answer);
   state.guesses.push(guess);
   state.current = '';
