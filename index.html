@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>VjezeFurdle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="header-spacer"></div>
+    <div class="header-center">
+      <h1>VjezeFurdle</h1>
+      <p class="tagline">Elke dag een woord van de meester</p>
+    </div>
+    <div class="header-actions">
+      <button id="info-btn" aria-label="Uitleg">&#x2139;</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="board"></div>
+    <div id="message" aria-live="polite"></div>
+  </main>
+
+  <div id="keyboard">
+    <div class="key-row" id="krow-1"></div>
+    <div class="key-row" id="krow-2"></div>
+    <div class="key-row" id="krow-3"></div>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="share-overlay" class="hidden">
+    <div id="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-title">
+      <div class="share-top">
+        <p class="share-lyric" id="share-lyric"></p>
+        <p class="share-song" id="share-song"></p>
+      </div>
+      <div class="share-divider"></div>
+      <div class="share-bottom">
+        <h2 id="share-title">Deel je resultaat</h2>
+        <p class="share-result" id="share-result"></p>
+        <div class="share-emoji-grid" id="share-emoji-grid"></div>
+        <button id="share-copy-btn">Kopieer naar klembord</button>
+        <button id="share-close-btn">Sluiten</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title">Hoe speel je VjezeFurdle?</h2>
+
+      <div class="modal-section">
+        <p>Raad het woord van de dag in <strong>6 pogingen</strong>.</p>
+        <p>Druk op <strong>Enter</strong> om je gok in te dienen. Elke dag een nieuw woord.</p>
+      </div>
+
+      <div class="modal-section">
+        <p><strong>Na elke gok laten de kleuren zien hoe dichtbij je zit:</strong></p>
+
+        <div class="example">
+          <div class="example-tiles">
+            <div class="example-tile correct">V</div>
+            <div class="example-tile empty">E</div>
+            <div class="example-tile empty">S</div>
+            <div class="example-tile empty">P</div>
+            <div class="example-tile empty">A</div>
+          </div>
+          <p><span class="clabel correct-label">Groen</span> &mdash; letter staat op de juiste plek.</p>
+        </div>
+
+        <div class="example">
+          <div class="example-tiles">
+            <div class="example-tile empty">B</div>
+            <div class="example-tile present">R</div>
+            <div class="example-tile empty">O</div>
+            <div class="example-tile empty">E</div>
+            <div class="example-tile empty">R</div>
+          </div>
+          <p><span class="clabel present-label">Geel</span> &mdash; letter zit in het woord, maar op de verkeerde plek.</p>
+        </div>
+
+        <div class="example">
+          <div class="example-tiles">
+            <div class="example-tile empty">R</div>
+            <div class="example-tile empty">A</div>
+            <div class="example-tile absent">K</div>
+            <div class="example-tile empty">E</div>
+            <div class="example-tile empty">T</div>
+          </div>
+          <p><span class="clabel absent-label">Grijs</span> &mdash; letter zit niet in het woord.</p>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <p>
+          VjezeFurdle is gebaseerd op de lyrics van <strong>Vjeze Fur</strong>, de rapper van
+          <strong>Jeugd van Tegenwoordig</strong>. Elk woord van de dag is een woord dat
+          Vjeze Fur ooit heeft gerapt, van straattaal tot pure poëzie.
+        </p>
+        <p>Eén woord per dag. Eén kans. Kom morgen terug.</p>
+      </div>
+
+      <button id="modal-close">Spelen!</button>
+    </div>
+  </div>
+
+  <script src="words.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
