@@ -239,23 +239,27 @@ function revealRow(rowIndex, colors, done) {
 
 const VALID_WORDS = new Set(WORDS.map(e => e.word.toUpperCase()));
 
-let dutchWords  = null;
-let validating  = false;
+let dutchWords        = null;
+let dutchWordsPromise = null;
+let validating        = false;
 
-async function loadDutchWords() {
-  try {
-    const res  = await fetch('dutch_words.txt');
-    const text = await res.text();
-    dutchWords = new Set(text.split('\n').map(w => w.trim().toUpperCase()).filter(Boolean));
-  } catch {
-    dutchWords = new Set();
-  }
+function loadDutchWords() {
+  dutchWordsPromise = (async () => {
+    try {
+      const res = await fetch('dutch_words.txt');
+      if (!res.ok) throw new Error('not found');
+      const text = await res.text();
+      dutchWords = new Set(text.split('\n').map(w => w.trim().toUpperCase()).filter(Boolean));
+    } catch {
+      dutchWords = null;
+    }
+  })();
 }
 
-function isValidDutchWord(word) {
+async function isValidDutchWord(word) {
   if (VALID_WORDS.has(word)) return true;
-  if (dutchWords) return dutchWords.has(word);
-  return true; // wordlist not loaded → fail open
+  if (dutchWordsPromise) await dutchWordsPromise;
+  return dutchWords ? dutchWords.has(word) : true;
 }
 // ── Input handling ──────────────────────────────────────
 
