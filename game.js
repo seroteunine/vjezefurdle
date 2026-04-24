@@ -239,20 +239,24 @@ function revealRow(rowIndex, colors, done) {
 
 const VALID_WORDS = new Set(WORDS.map(e => e.word.toUpperCase()));
 
-let validating = false;
+let dutchWords  = null;
+let validating  = false;
 
-async function isValidDutchWord(word) {
-  if (VALID_WORDS.has(word)) return true;
+async function loadDutchWords() {
   try {
-    const res = await fetch(`https://en.wiktionary.org/api/rest_v1/page/definition/${word.toLowerCase()}`);
-    if (!res.ok) return false;
-    const data = await res.json();
-    return 'nl' in data;
+    const res  = await fetch('dutch_words.txt');
+    const text = await res.text();
+    dutchWords = new Set(text.split('\n').map(w => w.trim().toUpperCase()).filter(Boolean));
   } catch {
-    return true; // network error → fail open
+    dutchWords = new Set();
   }
 }
 
+function isValidDutchWord(word) {
+  if (VALID_WORDS.has(word)) return true;
+  if (dutchWords) return dutchWords.has(word);
+  return true; // wordlist not loaded → fail open
+}
 // ── Input handling ──────────────────────────────────────
 
 function handleKey(key) {
@@ -427,6 +431,7 @@ function init() {
   state.song     = entry.song || '';
   state.wordLen  = state.answer.length;
 
+  loadDutchWords();
   buildBoard();
   buildKeyboard();
   loadState();
