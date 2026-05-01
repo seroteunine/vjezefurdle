@@ -90,10 +90,10 @@ function getColors(guess, answer) {
 // ── Tile sizing ─────────────────────────────────────────
 
 function applyTileSize(wordLen) {
-  // Fit tiles into ~330px comfortably (5px gap between each)
-  const available = Math.min(330, window.innerWidth - 32);
-  const size      = Math.floor((available - (wordLen - 1) * 5) / wordLen);
-  const capped    = Math.max(28, Math.min(62, size));
+  const gap       = 5;
+  const available = Math.min(360, window.innerWidth - 32);
+  const size      = Math.floor((available - (wordLen - 1) * gap) / wordLen);
+  const capped    = Math.max(20, Math.min(62, size));
   const fontSize  = (capped * 0.52).toFixed(1) + 'px';
   const board     = document.getElementById('board');
   board.style.setProperty('--tile-size', capped + 'px');
