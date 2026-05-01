@@ -478,12 +478,6 @@ main {
 /* ── Responsive ──────────────────────────── */
 
 @media (max-width: 380px) {
-  .tile {
-    width: 52px;
-    height: 52px;
-    font-size: 1.65rem;
-  }
-
   .key {
     max-width: 34px;
     height: 52px;
